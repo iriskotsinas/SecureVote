@@ -16,7 +16,7 @@ import temp.Voter;
 public class CLA implements Runnable {
 	private int port;
 	// This is not a reserved port number
-	static final int DEFAULT_PORT = 8189;
+	public static final int CLA_PORT = 8189;
 	static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
 	static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
 	static final String KEYSTOREPASS = "123456";
@@ -37,7 +37,58 @@ public class CLA implements Runnable {
         this.authorizedVoters = authorizedVoters;
     }
 	
+    private void startClient(InetAddress host, int port) throws Exception {
+        Client client = new Client(host, port);
+        SSLSocket c = client.getSocket();
+        clientInput = new BufferedReader(new InputStreamReader(c.getInputStream()));
+        clientOutput = new PrintWriter(c.getOutputStream(), true);
+    }
+    
+    private void authorizeVoters() throws Exception {
+        String str;
+        while (!(str = serverInput.readLine()).equals("end")) {
+            System.out.println("s: " + str);
+            // Clean the string from 'id=' and parse to int
+            int id = Integer.parseInt(str.substring(3));
+            Voter v_temp = new Voter(-1, id);
+            authorizedVoters.add(v_temp); // validera!!
+            serverOutput.println(v_temp.getValidationNr() + "/n" + "end");
+            
+            // TODO 
+            // Send to CTF !
+            // rename to registerVoter
+        }
+        clientOutput.println("terminate");
+    }
+    
     public void run() {
+    	try {
+        // Prepare incoming connections
+        serverInput = new BufferedReader(new InputStreamReader(incoming.getInputStream()));
+        serverOutput = new PrintWriter(incoming.getOutputStream(), true);
+        
+        startClient(InetAddress.getLocalHost(), CLA_PORT);
+        String str = serverInput.readLine();
+        
+        while (str != null) {
+            switch (str) {
+                case "get_validation_nr":
+                    authorizeVoters();
+                    break;
+                case "": break;
+                default:
+                    System.out.println("Unknown command: " + str);
+                    break;
+            }
+
+            str = serverInput.readLine();
+        }
+        
+        incoming.close();
+        
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
 	
     public static void main(String[] args) {

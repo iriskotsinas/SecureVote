@@ -33,6 +33,9 @@ public class Voter {
     public int getVote() {
         return id;
     }
+    public String getValidationNr() {
+        return validationNumber.toString();
+    }
     
     public void setValidationNumber(BigInteger validationNumber) {
         this.validationNumber = validationNumber;
