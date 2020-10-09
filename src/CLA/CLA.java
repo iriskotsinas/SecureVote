@@ -17,6 +17,7 @@ public class CLA implements Runnable {
 	private int port;
 	// This is not a reserved port number
 	public static final int CLA_PORT = 8189;
+	public static final int CTF_PORT = 8188;
 	static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
 	static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
 	static final String KEYSTOREPASS = "123456";
@@ -44,7 +45,7 @@ public class CLA implements Runnable {
         clientOutput = new PrintWriter(c.getOutputStream(), true);
     }
     
-    private void authorizeVoters() throws Exception {
+    private void registerVoter() throws Exception {
         String str;
         while (!(str = serverInput.readLine()).equals("end")) {
             System.out.println("s: " + str);
@@ -53,12 +54,19 @@ public class CLA implements Runnable {
             Voter v_temp = new Voter(-1, id);
             authorizedVoters.add(v_temp); // validera!!
             serverOutput.println(v_temp.getValidationNr() + "/n" + "end");
-            
-            // TODO 
+             
             // Send to CTF !
-            // rename to registerVoter
+            sendToCTF(v_temp.getValidationNr());
         }
         clientOutput.println("terminate");
+    }
+    
+    // STEP 3
+    // Send validation number to CTF
+    private void sendToCTF(String valNr) throws Exception {
+        clientOutput.println("valid_voter");
+        clientOutput.println(valNr);
+        clientOutput.println("end");
     }
     
     public void run() {
@@ -67,13 +75,14 @@ public class CLA implements Runnable {
         serverInput = new BufferedReader(new InputStreamReader(incoming.getInputStream()));
         serverOutput = new PrintWriter(incoming.getOutputStream(), true);
         
+        // Should be CTF_PORT
         startClient(InetAddress.getLocalHost(), CLA_PORT);
         String str = serverInput.readLine();
         
         while (str != null) {
             switch (str) {
                 case "get_validation_nr":
-                    authorizeVoters();
+                    registerVoter();
                     break;
                 case "": break;
                 default:
@@ -93,7 +102,7 @@ public class CLA implements Runnable {
 	
     public static void main(String[] args) {
         try {
-            Server s = new Server(DEFAULT_PORT);
+            Server s = new Server(CLA_PORT);
             Vector<Voter> allVoters = new Vector<>();
 
             while (true) {
