@@ -16,10 +16,6 @@ public class CTF implements Runnable {
 
 	public static final int CLA_PORT = 8188;
 	public static final int CTF_PORT = 8189;
-	// static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
-	// static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
-	// static final String KEYSTOREPASS = "123456";
-	// static final String TRUSTSTOREPASS = "abcdef";
 
 	private SSLSocket incoming;
 	private BufferedReader serverInput;

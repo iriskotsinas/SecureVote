@@ -7,7 +7,6 @@ public class Voter {
 	private BigInteger validationNumber = BigInteger.ZERO;
 	private int vote, id;
 
-	// Ska den finnas?
 	public Voter(int vote, int id) {
 		this.vote = vote;
 		this.id = id;
@@ -20,7 +19,6 @@ public class Voter {
 		this.vote = vote;
 	}
 
-	// Kolla upp
 	public Voter(BigInteger validationNumber, int vote, int id) {
 		this.validationNumber = validationNumber;
 		this.vote = vote;

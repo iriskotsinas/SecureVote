@@ -10,13 +10,8 @@ import temp.Client;
 import temp.Voter;
 
 public class election {
-
 	public static final int CLA_PORT = 8188;
 	public static final int CTF_PORT = 8189;
-	// static final String KEYSTORE = "src/temp/LIUkeystore.ks";
-	// static final String TRUSTSTORE = "src/temp/LIUtruststore.ks";
-	// static final String KEYSTOREPASS = "123456";
-	// static final String TRUSTSTOREPASS = "abcdef";
 
 	// Class variables
 	private BufferedReader socketIn;
