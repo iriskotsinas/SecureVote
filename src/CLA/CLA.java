@@ -53,7 +53,7 @@ public class CLA implements Runnable {
 			int id = Integer.parseInt(str.substring(3));
 			Voter v_temp = new Voter(-1, id);
 			authorizedVoters.add(v_temp); // validera!!
-			serverOutput.println(v_temp.getValidationNr() + "/n" + "end");
+			serverOutput.println(v_temp.getValidationNr() + "\n" + "end");
 
 			// Send to CTF !
 			sendToCTF(v_temp.getValidationNr());
