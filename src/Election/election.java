@@ -12,6 +12,8 @@ import CTF.CTF;
 
 public class election {
 	
+	public static final int CLA_PORT = 8188;
+	public static final int CTF_PORT = 8189;
 	static final String KEYSTORE = "src/temp/LIUkeystore.ks";
 	static final String TRUSTSTORE = "src/temp/LIUtruststore.ks";
 	static final String KEYSTOREPASS = "123456";
@@ -35,7 +37,7 @@ public class election {
 	 public void run() throws Exception {
 		// Connect to cla
 	    //startClient(InetAddress.getLocalHost(), );
-	    Client client = new Client(InetAddress.getLocalHost(), CLA.CLA_PORT);
+	    Client client = new Client(InetAddress.getLocalHost(), CLA_PORT);
         SSLSocket c = client.getSocket();
         // Setup transmissions
         socketIn = new BufferedReader(new InputStreamReader(c.getInputStream()));
@@ -46,9 +48,11 @@ public class election {
         voters = new Vector<>();
         for (int i = 0; i < 10; i++) {
             voters.add(new Voter(i % 2));
+            //System.out.println(voters.get(i).getChoice());
         }
         
-        socketOut.println("get_validation_nr"); 
+        socketOut.println("get_validation_nr");
+        System.out.println("HÄR");
         
         // ------    STEP 1 AND STEP 2 --------
         for (Voter v : voters) {
@@ -68,7 +72,7 @@ public class election {
         
         // STEP 4
         // Receive response (validation number) from server
-        startClient(InetAddress.getLocalHost(), CTF.CTF_PORT);
+        startClient(InetAddress.getLocalHost(), CTF_PORT);
         
         // Send votes
         for (Voter v : voters) {
@@ -95,5 +99,4 @@ public class election {
             e.printStackTrace();
         }
 	}
-
 }
