@@ -18,10 +18,11 @@ public class CLA implements Runnable {
 	// This is not a reserved port number
 	public static final int CLA_PORT = 8188;
 	public static final int CTF_PORT = 8189;
-	static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
-	static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
-	static final String KEYSTOREPASS = "123456";
-	static final String TRUSTSTOREPASS = "abcdef";
+	public static final int MINIMUM_AGE = 18000;
+	// static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
+	// static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
+	// static final String KEYSTOREPASS = "123456";
+	// static final String TRUSTSTOREPASS = "abcdef";
 
 	private SSLSocket incoming;
 	private BufferedReader serverInput, clientInput;
@@ -52,11 +53,14 @@ public class CLA implements Runnable {
 			// Clean the string from 'id=' and parse to int
 			int id = Integer.parseInt(str.substring(3));
 			Voter v_temp = new Voter(-1, id);
-			authorizedVoters.add(v_temp); // validera!!
-			serverOutput.println(v_temp.getValidationNr() + "\n" + "end");
+			// Validate voters
+			if (!authorizedVoters.contains(v_temp)) { // && v_temp.getId() > MINIMUM_AGE) { Should we check age? How?
+				authorizedVoters.add(v_temp); // validera!!
+				serverOutput.println(v_temp.getValidationNr() + "\n" + "end");
 
-			// Send to CTF !
-			sendToCTF(v_temp.getValidationNr());
+				// Send to CTF !
+				sendToCTF(v_temp.getValidationNr());
+			}
 		}
 		clientOutput.println("terminate");
 	}
@@ -64,7 +68,7 @@ public class CLA implements Runnable {
 	// STEP 3
 	// Send validation number to CTF
 	private void sendToCTF(String valNr) throws Exception {
-        System.out.println("SEND TO CTF");
+		System.out.println("SEND TO CTF");
 		clientOutput.println("valid_voter");
 		clientOutput.println(valNr);
 		clientOutput.println("end");
@@ -96,7 +100,6 @@ public class CLA implements Runnable {
 
 				str = serverInput.readLine();
 			}
-
 			incoming.close();
 
 		} catch (Exception e) {
@@ -112,7 +115,7 @@ public class CLA implements Runnable {
 
 			while (true) {
 				SSLSocket socket = (SSLSocket) s.getServerSocket().accept();
-                System.out.println("New CLA client connected");
+				System.out.println("New CLA client connected");
 				CLA c = new CLA(socket);
 				c.setAuthorizedVoters(allVoters);
 				Thread t = new Thread(c);

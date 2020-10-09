@@ -16,10 +16,10 @@ public class CTF implements Runnable {
 
 	public static final int CLA_PORT = 8188;
 	public static final int CTF_PORT = 8189;
-	static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
-	static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
-	static final String KEYSTOREPASS = "123456";
-	static final String TRUSTSTOREPASS = "abcdef";
+	// static final String KEYSTORE = "src/CLA/LIUkeystore.ks";
+	// static final String TRUSTSTORE = "src/CLA/LIUtruststore.ks";
+	// static final String KEYSTOREPASS = "123456";
+	// static final String TRUSTSTOREPASS = "abcdef";
 
 	private SSLSocket incoming;
 	private BufferedReader serverInput;
@@ -41,10 +41,10 @@ public class CTF implements Runnable {
 	public void setVotes(Map<Integer, Integer> votes) {
 		this.votes = votes;
 	}
-	
-    public void setVotingVoters(Vector<Voter> votingVoters) {
-        this.votingVoters = votingVoters;
-    }
+
+	public void setVotingVoters(Vector<Voter> votingVoters) {
+		this.votingVoters = votingVoters;
+	}
 
 	public void registerValidationNr() throws IOException {
 		String str = serverInput.readLine();
@@ -58,7 +58,7 @@ public class CTF implements Runnable {
 		String str = serverInput.readLine();
 		System.out.println("Vote: " + str);
 		String[] totalVote = str.split("_");
-		
+
 		// STEP 5
 		if (authorizedVoters.contains(totalVote[1])) {
 			int id = Integer.parseInt(totalVote[0]);
@@ -78,36 +78,37 @@ public class CTF implements Runnable {
 	public void publishResult() throws IOException {
 		int bidenVoteCount = 0;
 		int trumpVoteCount = 0;
-        int totalVotes = votingVoters.size();
-        
-        serverOutput.println("election");
-        serverOutput.println("Please, vote 0 for Biden and 1 for Trump.");
-        serverOutput.println("Total votes: " + totalVotes);
-        
-        for (Map.Entry<Integer, Integer> v : votes.entrySet()) {
-        		// Percentage
-            float result = 100 * v.getValue() / totalVotes;
-            serverOutput.println("Candidate " + v.getKey() + ": "
-                    + v.getValue() + " (" +  result + "%)");
-        }
-        
-        serverOutput.println("All the voting voters:");
-        for (Voter v : votingVoters) {
-            serverOutput.println("ID: " + v.getId() + ", Vote: " + v.getChoice());
-            if (v.getChoice() == 0) bidenVoteCount++;
-            else trumpVoteCount++;
-        }
-        
-        if (bidenVoteCount > trumpVoteCount) {
-            serverOutput.println("Biden won!");
-        } else if (bidenVoteCount < trumpVoteCount) {
-//        	System.out.println(bidenVoteCount);
-//        	System.out.println(trumpVoteCount);
-            serverOutput.println("Trump won!");
-        } else {
-            serverOutput.println("It's a tie!!!!");
-        }
-        serverOutput.println("end");
+		int totalVotes = votingVoters.size();
+
+		// serverOutput.println("WELCOME!!");
+		// serverOutput.println("Please, vote 0 for Biden and 1 for Trump.");
+		serverOutput.println("Total votes: " + totalVotes);
+
+		for (Map.Entry<Integer, Integer> v : votes.entrySet()) {
+			// Percentage
+			float result = 100 * v.getValue() / totalVotes;
+			serverOutput.println("Candidate " + v.getKey() + ": " + v.getValue() + " (" + result + "%)");
+		}
+
+		serverOutput.println("All the voting voters:");
+		for (Voter v : votingVoters) {
+			serverOutput.println("ID: " + v.getId() + ", Vote: " + v.getChoice());
+			if (v.getChoice() == 0)
+				bidenVoteCount++;
+			else
+				trumpVoteCount++;
+		}
+
+		if (bidenVoteCount > trumpVoteCount) {
+			serverOutput.println("Biden won!");
+		} else if (bidenVoteCount < trumpVoteCount) {
+			// System.out.println(bidenVoteCount);
+			// System.out.println(trumpVoteCount);
+			serverOutput.println("Trump won!");
+		} else {
+			serverOutput.println("It's a tie!!!!");
+		}
+		serverOutput.println("end");
 	}
 
 	public void run() {
