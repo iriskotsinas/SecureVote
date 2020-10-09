@@ -102,6 +102,7 @@ public class CTF implements Runnable {
         } else {
             serverOutput.println("Trump won!");
         }
+        // TODO case 50/50
         serverOutput.println("end");
 	}
 

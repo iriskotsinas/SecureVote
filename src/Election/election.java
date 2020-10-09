@@ -51,8 +51,9 @@ public class election {
             //System.out.println(voters.get(i).getChoice());
         }
         
+        // TODO random 0 or 1
+        
         socketOut.println("get_validation_nr");
-        System.out.println("HÄR");
         
         // ------    STEP 1 AND STEP 2 --------
         for (Voter v : voters) {
