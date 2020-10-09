@@ -94,15 +94,19 @@ public class CTF implements Runnable {
         serverOutput.println("All the voting voters:");
         for (Voter v : votingVoters) {
             serverOutput.println("ID: " + v.getId() + ", Vote: " + v.getChoice());
-            if(v.getId() == 0) bidenVoteCount++;
+            if (v.getChoice() == 0) bidenVoteCount++;
             else trumpVoteCount++;
         }
-        if(bidenVoteCount > trumpVoteCount) {
+        
+        if (bidenVoteCount > trumpVoteCount) {
             serverOutput.println("Biden won!");
-        } else {
+        } else if (bidenVoteCount < trumpVoteCount) {
+//        	System.out.println(bidenVoteCount);
+//        	System.out.println(trumpVoteCount);
             serverOutput.println("Trump won!");
+        } else {
+            serverOutput.println("It's a tie!!!!");
         }
-        // TODO case 50/50
         serverOutput.println("end");
 	}
 

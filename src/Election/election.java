@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.Vector;
 import javax.net.ssl.*;
+import java.math.*;
 
 import temp.Client;
 import temp.Voter;
@@ -46,8 +47,9 @@ public class election {
         // STEP 4
         // Create 10 voters with the CLA, rand id nr
         voters = new Vector<>();
-        for (int i = 0; i < 10; i++) {
-            voters.add(new Voter(i % 2));
+        for (int i = 0; i < 20; i++) {
+        		voters.add(new Voter((int) Math.round(Math.random())));
+            //voters.add(new Voter(i % 2));
             //System.out.println(voters.get(i).getChoice());
         }
         
