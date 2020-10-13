@@ -12,7 +12,6 @@ import javax.net.ssl.TrustManagerFactory;
 public class Server {
 	private int port;
 	private SSLServerSocket sss;
-	// This is not a reserved port number
 	static final int CLA_PORT = 8189;
 	static final int CTF_PORT = 8188;
 	static final String KEYSTORE = "src/temp/LIUkeystore.ks";
@@ -27,7 +26,6 @@ public class Server {
 	 *            The port where the server will listen for requests
 	 */
 
-	// Should it be public?
 	public Server(int port) {
 		this.port = port;
 		run();

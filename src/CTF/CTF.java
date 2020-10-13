@@ -74,14 +74,9 @@ public class CTF implements Runnable {
 		int bidenVoteCount = 0;
 		int trumpVoteCount = 0;
 		int totalVotes = votingVoters.size();
+		String[] candidates = {"Biden", "Trump"};
 
 		serverOutput.println("Total votes: " + totalVotes);
-
-		for (Map.Entry<Integer, Integer> v : votes.entrySet()) {
-			// Percentage
-			float result = 100 * v.getValue() / totalVotes;
-			serverOutput.println("Candidate " + v.getKey() + ": " + v.getValue() + " (" + result + "%)");
-		}
 
 		serverOutput.println("All the voting voters:");
 		for (Voter v : votingVoters) {
@@ -91,6 +86,14 @@ public class CTF implements Runnable {
 			else
 				trumpVoteCount++;
 		}
+		serverOutput.println("\n");
+		
+		for (Map.Entry<Integer, Integer> v : votes.entrySet()) {
+			// Percentage
+			float result = 100 * v.getValue() / totalVotes;
+			serverOutput.println("Candidate " + candidates[v.getKey()] + ": " + v.getValue() + " (" + result + "%)");
+		}
+		serverOutput.println("\n");
 
 		if (bidenVoteCount > trumpVoteCount) {
 			serverOutput.println("Biden won!");

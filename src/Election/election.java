@@ -25,6 +25,14 @@ public class election {
 		socketIn = new BufferedReader(new InputStreamReader(c.getInputStream()));
 		socketOut = new PrintWriter(c.getOutputStream(), true);
 	}
+	
+	private static void welcome() {
+		System.out.println("\n*********************************************");
+		System.out.println("* WELCOME TO THE PRESIDENTIAL ELECTION 2020 *");
+		System.out.println("*********************************************");
+		System.out.println("\n");
+		System.out.println("Please, vote 0 for Biden and 1 for Trump. \n");
+	}
 
 	public void run() throws Exception {
 		// Connect to CLA
@@ -36,7 +44,7 @@ public class election {
 		socketOut = new PrintWriter(c.getOutputStream(), true);
 
 		// STEP 4
-		// Create 10 voters with the CLA, rand id nr
+		// Create 20 voters with the CLA, random id nr
 		voters = new Vector<>();
 		for (int i = 0; i < 20; i++) {
 			voters.add(new Voter((int) Math.round(Math.random())));
@@ -69,12 +77,8 @@ public class election {
 			socketOut.println(v.myVote());
 			socketOut.println("end");
 		}
-
-		System.out.println("\n*********************************************");
-		System.out.println("* WELCOME TO THE PRESIDENTIAL ELECTION 2020 *");
-		System.out.println("*********************************************");
-		System.out.println("\n");
-		System.out.println("Please, vote 0 for Biden and 1 for Trump. \n");
+		
+		welcome();
 		// Get result
 		socketOut.println("result");
 		String result;
