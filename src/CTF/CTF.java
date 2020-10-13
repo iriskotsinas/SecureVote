@@ -12,7 +12,6 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class CTF implements Runnable {
-	private int port;
 
 	public static final int CLA_PORT = 8188;
 	public static final int CTF_PORT = 8189;
@@ -112,11 +111,9 @@ public class CTF implements Runnable {
 			serverInput = new BufferedReader(new InputStreamReader(incoming.getInputStream()));
 			serverOutput = new PrintWriter(incoming.getOutputStream(), true);
 			String str = serverInput.readLine();
-			System.out.println("BEFORE CTF CASE");
 			while (str != null) {
 				switch (str) {
 				case "valid_voter":
-					System.out.println("VALID VOTER");
 					registerValidationNr();
 					break;
 				case "register_vote":
@@ -139,9 +136,7 @@ public class CTF implements Runnable {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println("INNAN");
 			Server s = new Server(CTF_PORT);
-			System.out.println("EFTER");
 			// Shared resources for all threads
 			Vector<String> authorizedVoters = new Vector<>();
 			Vector<Voter> votingVoters = new Vector<>();

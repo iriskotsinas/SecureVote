@@ -3,9 +3,7 @@ package CLA;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import java.net.InetAddress;
-import java.security.SecureRandom;
 import java.util.Vector;
 import javax.net.ssl.*;
 
@@ -14,13 +12,12 @@ import temp.Server;
 import temp.Voter;
 
 public class CLA implements Runnable {
-	private int port;
 	public static final int CLA_PORT = 8188;
 	public static final int CTF_PORT = 8189;
 	public static final int MINIMUM_AGE = 18000;
 
 	private SSLSocket incoming;
-	private BufferedReader serverInput, clientInput;
+	private BufferedReader serverInput;
 	private PrintWriter serverOutput, clientOutput;
 
 	private Vector<Voter> authorizedVoters;
@@ -37,7 +34,7 @@ public class CLA implements Runnable {
 	private void startClient(InetAddress host, int port) throws Exception {
 		Client client = new Client(host, port);
 		SSLSocket c = client.getSocket();
-		clientInput = new BufferedReader(new InputStreamReader(c.getInputStream()));
+		//clientInput = new BufferedReader(new InputStreamReader(c.getInputStream()));
 		clientOutput = new PrintWriter(c.getOutputStream(), true);
 	}
 
@@ -63,7 +60,6 @@ public class CLA implements Runnable {
 	// STEP 3
 	// Send validation number to CTF
 	private void sendToCTF(String valNr) throws Exception {
-		System.out.println("SEND TO CTF");
 		clientOutput.println("valid_voter");
 		clientOutput.println(valNr);
 		clientOutput.println("end");
@@ -78,7 +74,6 @@ public class CLA implements Runnable {
 			// Should be CTF_PORT
 			startClient(InetAddress.getLocalHost(), CTF_PORT);
 			String str = serverInput.readLine();
-			System.out.println("BEFORE CASE");
 
 			while (str != null) {
 				switch (str) {
@@ -106,7 +101,6 @@ public class CLA implements Runnable {
 		try {
 			Server s = new Server(CLA_PORT);
 			Vector<Voter> allVoters = new Vector<>();
-			System.out.println("MAIN");
 
 			while (true) {
 				SSLSocket socket = (SSLSocket) s.getServerSocket().accept();
