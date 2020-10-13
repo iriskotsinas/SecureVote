@@ -14,8 +14,6 @@ public class Client {
 	private InetAddress host;
 	private int port;
 	private SSLSocket client;
-	// This is not a reserved port number
-	static final int DEFAULT_PORT = 8189;
 	static final String KEYSTORE = "src/temp/LIUkeystore.ks";
 	static final String TRUSTSTORE = "src/temp/LIUtruststore.ks";
 	static final String KEYSTOREPASS = "123456";

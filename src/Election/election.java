@@ -41,10 +41,7 @@ public class election {
 		for (int i = 0; i < 20; i++) {
 			voters.add(new Voter((int) Math.round(Math.random())));
 			// voters.add(new Voter(i % 2));
-			// System.out.println(voters.get(i).getChoice());
 		}
-
-		// TODO random 0 or 1
 
 		socketOut.println("get_validation_nr");
 

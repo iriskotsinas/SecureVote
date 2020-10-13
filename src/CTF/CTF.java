@@ -20,8 +20,8 @@ public class CTF implements Runnable {
 	private BufferedReader serverInput;
 	private PrintWriter serverOutput;
 
-	// String versions of CLA's validation numbers
-	private Vector<String> authorizedVoters = new Vector<>();
+	// CLA's validation numbers
+	private Vector<String> possibleVoters = new Vector<>();
 	private Vector<Voter> votingVoters = new Vector<>();
 	private Map<Integer, Integer> votes = new HashMap<Integer, Integer>();
 
@@ -29,8 +29,8 @@ public class CTF implements Runnable {
 		this.incoming = incoming;
 	}
 
-	public void setAuthorizedVoters(Vector<String> authorizedVoters) {
-		this.authorizedVoters = authorizedVoters;
+	public void setPossibleVoters(Vector<String> authorizedVoters) {
+		this.possibleVoters = authorizedVoters;
 	}
 
 	public void setVotes(Map<Integer, Integer> votes) {
@@ -44,8 +44,8 @@ public class CTF implements Runnable {
 	public void registerValidationNr() throws IOException {
 		String str = serverInput.readLine();
 		System.out.println("Validation Nr: " + str);
-		if (!authorizedVoters.contains(str)) {
-			authorizedVoters.add(str);
+		if (!possibleVoters.contains(str)) {
+			possibleVoters.add(str);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class CTF implements Runnable {
 		String[] totalVote = str.split("_");
 
 		// STEP 5
-		if (authorizedVoters.contains(totalVote[1])) {
+		if (possibleVoters.contains(totalVote[1])) {
 			int id = Integer.parseInt(totalVote[0]);
 			int vote = Integer.parseInt(totalVote[2]);
 			BigInteger validationNumber = new BigInteger(totalVote[1]);
@@ -64,7 +64,7 @@ public class CTF implements Runnable {
 				System.out.println("Voter who is voting: " + v);
 				votingVoters.add(v);
 				// Save the vote
-				// Many examples online
+				// Examples online on why we do this
 				votes.put(vote, votes.getOrDefault(vote, 0) + 1);
 			}
 		}
@@ -75,8 +75,6 @@ public class CTF implements Runnable {
 		int trumpVoteCount = 0;
 		int totalVotes = votingVoters.size();
 
-		// serverOutput.println("WELCOME!!");
-		// serverOutput.println("Please, vote 0 for Biden and 1 for Trump.");
 		serverOutput.println("Total votes: " + totalVotes);
 
 		for (Map.Entry<Integer, Integer> v : votes.entrySet()) {
@@ -123,7 +121,7 @@ public class CTF implements Runnable {
 					publishResult();
 					break;
 				default:
-					System.out.println("Error, can't recognize command: " + str);
+					System.out.println("Error: " + str);
 					break;
 				}
 				str = serverInput.readLine();
@@ -147,7 +145,7 @@ public class CTF implements Runnable {
 				System.out.println("New CTF client connected");
 
 				CTF c = new CTF(socket);
-				c.setAuthorizedVoters(authorizedVoters);
+				c.setPossibleVoters(authorizedVoters);
 				c.setVotingVoters(votingVoters);
 				c.setVotes(votes);
 				Thread t = new Thread(c);

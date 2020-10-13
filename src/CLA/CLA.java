@@ -20,15 +20,15 @@ public class CLA implements Runnable {
 	private BufferedReader serverInput;
 	private PrintWriter serverOutput, clientOutput;
 
-	private Vector<Voter> authorizedVoters;
+	private Vector<Voter> possibleVoters;
 
 	public CLA(SSLSocket incoming) {
 		this.incoming = incoming;
 	}
 
 	// Setter
-	public void setAuthorizedVoters(Vector<Voter> authorizedVoters) {
-		this.authorizedVoters = authorizedVoters;
+	public void setPossibleVoters(Vector<Voter> authorizedVoters) {
+		this.possibleVoters = authorizedVoters;
 	}
 
 	private void startClient(InetAddress host, int port) throws Exception {
@@ -42,12 +42,13 @@ public class CLA implements Runnable {
 		String str;
 		while (!(str = serverInput.readLine()).equals("end")) {
 			System.out.println("s: " + str);
-			// Clean the string from 'id=' and parse to int
+			// Clean the string from 'id='
+			// Parse to int
 			int id = Integer.parseInt(str.substring(3));
 			Voter v_temp = new Voter(-1, id);
 			// Validate voters
-			if (!authorizedVoters.contains(v_temp)) { // && v_temp.getId() > MINIMUM_AGE) { Should we check age? How?
-				authorizedVoters.add(v_temp); // validera!!
+			if (!possibleVoters.contains(v_temp)) {
+				possibleVoters.add(v_temp);
 				serverOutput.println(v_temp.getValidationNr() + "\n" + "end");
 
 				// Send to CTF !
@@ -106,7 +107,7 @@ public class CLA implements Runnable {
 				SSLSocket socket = (SSLSocket) s.getServerSocket().accept();
 				System.out.println("New CLA client connected");
 				CLA c = new CLA(socket);
-				c.setAuthorizedVoters(allVoters);
+				c.setPossibleVoters(allVoters);
 				Thread t = new Thread(c);
 				t.start();
 			}
